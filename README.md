@@ -14,7 +14,7 @@ You don't need this source code unless you want to modify the package. If you ju
 want to use the package, just run:
 
 ```sh
-pip install --upgrade openai
+pip install --upgrade surfai
 ```
 
 Install from source with:
@@ -25,10 +25,10 @@ python setup.py install
 
 ### Optional dependencies
 
-Install dependencies for [`openai.embeddings_utils`](openai/embeddings_utils.py):
+Install dependencies for [`openai.embeddings_utils`](surfai/embeddings_utils.py):
 
 ```sh
-pip install openai[embeddings]
+pip install surfai[embeddings]
 ```
 
 Install support for [Weights & Biases](https://wandb.me/openai-docs):
@@ -40,7 +40,7 @@ pip install openai[wandb]
 Data libraries like `numpy` and `pandas` are not installed by default due to their size. They’re needed for some functionality of this library, but generally not for talking to the API. If you encounter a `MissingDependencyError`, install them with:
 
 ```sh
-pip install openai[datalib]
+pip install surfai[datalib]
 ```
 
 ## Usage
@@ -54,17 +54,19 @@ export OPENAI_API_KEY='sk-...'
 Or set `openai.api_key` to its value:
 
 ```python
-import openai
-openai.api_key = "sk-..."
+import surfai
+
+surfai.api_key = "sk-..."
 
 # list models
-models = openai.Model.list()
+models = surfai.Model.list()
 
 # print the first model's id
 print(models.data[0].id)
 
 # create a chat completion
-chat_completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": "Hello world"}])
+chat_completion = surfai.ChatCompletion.create(model="gpt-3.5-turbo",
+                                               messages=[{"role": "user", "content": "Hello world"}])
 
 # print the chat completion
 print(chat_completion.choices[0].message.content)
@@ -80,14 +82,16 @@ In order to use the library with Microsoft Azure endpoints, you need to set the 
 In addition, the deployment name must be passed as the engine parameter.
 
 ```python
-import openai
-openai.api_type = "azure"
-openai.api_key = "..."
-openai.api_base = "https://example-endpoint.openai.azure.com"
-openai.api_version = "2023-05-15"
+import surfai
+
+surfai.api_type = "azure"
+surfai.api_key = "..."
+surfai.api_base = "https://example-endpoint.openai.azure.com"
+surfai.api_version = "2023-05-15"
 
 # create a chat completion
-chat_completion = openai.ChatCompletion.create(deployment_id="deployment-name", model="gpt-3.5-turbo", messages=[{"role": "user", "content": "Hello world"}])
+chat_completion = surfai.ChatCompletion.create(deployment_id="deployment-name", model="gpt-3.5-turbo",
+                                               messages=[{"role": "user", "content": "Hello world"}])
 
 # print the completion
 print(completion.choices[0].message.content)
@@ -106,17 +110,17 @@ In order to use Microsoft Active Directory to authenticate to your Azure endpoin
 
 ```python
 from azure.identity import DefaultAzureCredential
-import openai
+import surfai
 
 # Request credential
 default_credential = DefaultAzureCredential()
 token = default_credential.get_token("https://cognitiveservices.azure.com/.default")
 
 # Setup parameters
-openai.api_type = "azure_ad"
-openai.api_key = token.token
-openai.api_base = "https://example-endpoint.openai.azure.com/"
-openai.api_version = "2023-05-15"
+surfai.api_type = "azure_ad"
+surfai.api_key = token.token
+surfai.api_base = "https://example-endpoint.openai.azure.com/"
+surfai.api_version = "2023-05-15"
 
 # ...
 ```
@@ -129,19 +133,19 @@ which makes it easy to interact with the API from your terminal. Run
 
 ```sh
 # list models
-openai api models.list
+surfai api models.list
 
 # create a chat completion (gpt-3.5-turbo, gpt-4, etc.)
-openai api chat_completions.create -m gpt-3.5-turbo -g user "Hello world"
+surfai api chat_completions.create -m gpt-3.5-turbo -g user "Hello world"
 
 # create a completion (text-davinci-003, text-davinci-002, ada, babbage, curie, davinci, etc.)
-openai api completions.create -m ada -p "Hello world"
+surfai api completions.create -m ada -p "Hello world"
 
 # generate images via DALL·E API
-openai api image.create -p "two dogs playing chess, cartoon" -n 1
+surfai api image.create -p "two dogs playing chess, cartoon" -n 1
 
-# using openai through a proxy
-openai --proxy=http://proxy.com api models.list
+# using surfai through a proxy
+surfai --proxy=http://proxy.com api models.list
 ```
 
 ## Example code
@@ -164,10 +168,11 @@ Prior to July 2022, this OpenAI Python library hosted code examples in its examp
 Conversational models such as `gpt-3.5-turbo` can be called using the chat completions endpoint.
 
 ```python
-import openai
-openai.api_key = "sk-..."  # supply your API key however you choose
+import surfai
 
-completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": "Hello world"}])
+surfai.api_key = "sk-..."  # supply your API key however you choose
+
+completion = surfai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": "Hello world"}])
 print(completion.choices[0].message.content)
 ```
 
@@ -176,10 +181,11 @@ print(completion.choices[0].message.content)
 Text models such as `text-davinci-003`, `text-davinci-002` and earlier (`ada`, `babbage`, `curie`, `davinci`, etc.) can be called using the completions endpoint.
 
 ```python
-import openai
-openai.api_key = "sk-..."  # supply your API key however you choose
+import surfai
 
-completion = openai.Completion.create(model="text-davinci-003", prompt="Hello world")
+surfai.api_key = "sk-..."  # supply your API key however you choose
+
+completion = surfai.Completion.create(model="text-davinci-003", prompt="Hello world")
 print(completion.choices[0].text)
 ```
 
@@ -190,8 +196,9 @@ In the OpenAI Python library, an embedding represents a text string as a fixed-l
 To get an embedding for a text string, you can use the embeddings method as follows in Python:
 
 ```python
-import openai
-openai.api_key = "sk-..."  # supply your API key however you choose
+import surfai
+
+surfai.api_key = "sk-..."  # supply your API key however you choose
 
 # choose text to embed
 text_string = "sample text"
@@ -200,7 +207,7 @@ text_string = "sample text"
 model_id = "text-similarity-davinci-001"
 
 # compute the embedding of the text
-embedding = openai.Embedding.create(input=text_string, model=model_id)['data'][0]['embedding']
+embedding = surfai.Embedding.create(input=text_string, model=model_id)['data'][0]['embedding']
 ```
 
 An example of how to call the embeddings method is shown in this [get embeddings notebook](https://github.com/openai/openai-cookbook/blob/main/examples/Get_embeddings.ipynb).
@@ -232,7 +239,7 @@ Examples of fine-tuning are shared in the following Jupyter notebooks:
 Sync your fine-tunes to [Weights & Biases](https://wandb.me/openai-docs) to track experiments, models, and datasets in your central dashboard with:
 
 ```bash
-openai wandb sync
+surfai wandb sync
 ```
 
 For more information on fine-tuning, read the [fine-tuning guide](https://beta.openai.com/docs/guides/fine-tuning) in the OpenAI documentation.
@@ -242,10 +249,12 @@ For more information on fine-tuning, read the [fine-tuning guide](https://beta.o
 OpenAI provides a Moderation endpoint that can be used to check whether content complies with the OpenAI [content policy](https://platform.openai.com/docs/usage-policies)
 
 ```python
-import openai
-openai.api_key = "sk-..."  # supply your API key however you choose
+import surfai
 
-moderation_resp = openai.Moderation.create(input="Here is some perfectly innocuous text that follows all OpenAI content policies.")
+surfai.api_key = "sk-..."  # supply your API key however you choose
+
+moderation_resp = surfai.Moderation.create(
+  input="Here is some perfectly innocuous text that follows all OpenAI content policies.")
 ```
 
 See the [moderation guide](https://platform.openai.com/docs/guides/moderation) for more details.
@@ -253,20 +262,22 @@ See the [moderation guide](https://platform.openai.com/docs/guides/moderation) f
 ## Image generation (DALL·E)
 
 ```python
-import openai
-openai.api_key = "sk-..."  # supply your API key however you choose
+import surfai
 
-image_resp = openai.Image.create(prompt="two dogs playing chess, oil painting", n=4, size="512x512")
+surfai.api_key = "sk-..."  # supply your API key however you choose
+
+image_resp = surfai.Image.create(prompt="two dogs playing chess, oil painting", n=4, size="512x512")
 
 ```
 
 ## Audio transcription (Whisper)
 
 ```python
-import openai
-openai.api_key = "sk-..."  # supply your API key however you choose
+import surfai
+
+surfai.api_key = "sk-..."  # supply your API key however you choose
 f = open("path/to/file.mp3", "rb")
-transcript = openai.Audio.transcribe("whisper-1", f)
+transcript = surfai.Audio.transcribe("whisper-1", f)
 
 ```
 
@@ -275,11 +286,14 @@ transcript = openai.Audio.transcribe("whisper-1", f)
 Async support is available in the API by prepending `a` to a network-bound method:
 
 ```python
-import openai
-openai.api_key = "sk-..."  # supply your API key however you choose
+import surfai
+
+surfai.api_key = "sk-..."  # supply your API key however you choose
+
 
 async def create_chat_completion():
-    chat_completion_resp = await openai.ChatCompletion.acreate(model="gpt-3.5-turbo", messages=[{"role": "user", "content": "Hello world"}])
+  chat_completion_resp = await surfai.ChatCompletion.acreate(model="gpt-3.5-turbo",
+                                                             messages=[{"role": "user", "content": "Hello world"}])
 
 ```
 
@@ -288,12 +302,12 @@ To make async requests more efficient, you can pass in your own
 of your program/event loop:
 
 ```python
-import openai
+import surfai
 from aiohttp import ClientSession
 
-openai.aiosession.set(ClientSession())
+surfai.aiosession.set(ClientSession())
 # At the end of your program, close the http session
-await openai.aiosession.get().close()
+await surfai.aiosession.get().close()
 ```
 
 See the [usage guide](https://platform.openai.com/docs/guides/images) for more details.

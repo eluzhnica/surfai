@@ -7,4 +7,4 @@ if os.getenv("OPENAI_UPLOAD") != "y":
         "This package is a placeholder package on the public PyPI instance, and is not the correct version to install. If you are having trouble figuring out the correct package to install, please contact us."
     )
 
-setup(name="openai", description="Placeholder package", version="0.0.1")
+setup(name="surfai", description="Placeholder package", version="0.0.1")

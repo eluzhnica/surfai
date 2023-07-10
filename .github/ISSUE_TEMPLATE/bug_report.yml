@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report! If you have questions about using the OpenAI Python library, please post on our [Community forum](https://community.openai.com). 
+        Thanks for taking the time to fill out this bug report! If you have questions about using the OpenAI Python library, please post on our [Community forum](https://community.surfai.com).
   - type: textarea
     id: what-happened
     attributes:
@@ -51,6 +51,6 @@ body:
     id: lib-version
     attributes:
       label: Library version
-      placeholder: openai-python v0.26.4
+      placeholder: surfai-python v0.26.4
     validations:
       required: true

@@ -16,6 +16,7 @@ if "pkg_resources" not in sys.modules:
 
     del sys.modules["pkg_resources"]
 
+import surfai as openai
 from openai.api_resources import (
     Audio,
     ChatCompletion,
